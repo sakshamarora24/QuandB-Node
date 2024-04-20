@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #191d28;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo {
+            height: 60px;
+            width: 350px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header1 {
+            display: flex;
+            margin-bottom: 5rem;
+        }
+
+        .button {
+            background-color: rgba(255, 255, 255, 0.2);
+            height: 30px;
+            font-size: large;
+            color: #ffff;
+            border-radius: 10px;
+            padding: 0px 20px;
+        }
+
+        .triangle-container {
+            margin: auto;
+        }
+
+        .row1 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #808288;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Add margin-bottom for spacing between rows */
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 21px;
+}
+
+        .row:first-child {
+            margin-bottom: 20px;
+        }
+
+        .col {
+            flex-basis: 33%;
+            text-align: center;
+        }
+
+        .col:first-child {
+            text-align: left;
+        }
+
+        .col:last-child {
+            text-align: right;
+        }
+
+        .btn {
+            background-color: #3DC6C1;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+            margin-left: auto;
+            border-radius: 8px;
+        }
+    </style>
+    <title>HODLINFO</title>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header1">
+            <img class="logo" src="logo.png">
+            <div class="triangle-container">
+                <button class="button button1">INR▼</button>
+                <button class="button button2">BTC▼</button>
+                <button class="button button3">Buy BTC</button>
+            </div>
+            <div class="col">
+                <button class="btn">Connect to Telegram</button>
+            </div>
+        </header>
+        <div class="row1">
+            <div class="col">
+                <h2>#</h2>
+            </div>
+            <div class="col">
+                <h2>Platform</h2>
+            </div>
+            <div class="col">
+                <h2>Last Traded Price</h2>
+            </div>
+            <div class="col">
+                <h2>Buy / Sell Price</h2>
+            </div>
+            <div class="col">
+                <h2>Volume</h2>
+            </div>
+            <div class="col">
+                <h2>Base Unit</h2>
+            </div>
+        </div>
+        <div id="cryptoData"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            try {
+                // Fetch data from the server
+                const response = await fetch('/get-stored-data');
+                const cryptoData = await response.json();
+                const tableBody = document.querySelector('#cryptoData');
+    
+                cryptoData.forEach((data, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'row';
+    
+                    // Serial number
+                    const serialNumberCell = document.createElement('div');
+                    serialNumberCell.className = 'col';
+                    serialNumberCell.textContent = index + 1;
+                    row.appendChild(serialNumberCell);
+    
+                    // Specify the fields to include in the table
+                    const fields = ['name', 'last', 'buy', 'volume', 'base_unit'];
+    
+                    fields.forEach(field => {
+                        const cell = document.createElement('div');
+                        cell.className = 'col';
+                        cell.textContent = (field === 'buy' || field === 'sell') ? `₹${data.buy}/${data.sell}` : data[field];
+                        row.appendChild(cell);
+                    });
+    
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        });
+    </script>
+    
+    
+</body>
+
+</html>
